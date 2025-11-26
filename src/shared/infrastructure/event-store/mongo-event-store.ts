@@ -34,13 +34,7 @@ export class MongoEventStore implements EventStore {
     } catch (error) {
       await session.abortTransaction();
 
-      const UNIQUE_CONSTRAINT_ERROR_CODE = 11000;
-      if (error?.code === UNIQUE_CONSTRAINT_ERROR_CODE) {
-        this.logger.error(`Events could not be persisted. Aggregate is stale.`);
-        console.error(error.writeErrors?.[0]?.err?.errmsg);
-      } else {
-        throw error;
-      }
+      throw error;
     } finally {
       await session.endSession();
     }

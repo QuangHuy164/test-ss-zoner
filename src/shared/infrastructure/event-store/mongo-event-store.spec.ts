@@ -34,6 +34,7 @@ describe('MongoEventStore.persist', () => {
     } as unknown as EventDeserializer);
 
     const persistPromise = store.persist(event);
+    console.log('persistPromise', persistPromise);
     let completed = false;
     persistPromise.then(() => {
       completed = true;

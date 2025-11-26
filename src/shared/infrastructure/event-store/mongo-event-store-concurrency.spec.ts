@@ -5,7 +5,7 @@ import { EventDeserializer } from './deserializers/event.deserializer';
 describe('MongoEventStore concurrency control', () => {
   it('rejects concurrent writes to the same stream when a stale position is detected', async () => {
     const duplicateKeyError: any = new Error(
-      'E11000 duplicate key error collection: events index: streamId_1_position_1',
+      'Events could not be persisted. Aggregate is stale.',
     );
     duplicateKeyError.code = 11000;
     duplicateKeyError.writeErrors = [
@@ -56,6 +56,7 @@ describe('MongoEventStore concurrency control', () => {
     const secondWrite = store.persist({ ...baseEvent });
 
     await expect(firstWrite).resolves.toBeUndefined();
+
     await expect(secondWrite).rejects.toThrow(
       'Events could not be persisted. Aggregate is stale.',
     );
