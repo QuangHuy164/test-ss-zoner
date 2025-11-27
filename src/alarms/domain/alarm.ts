@@ -2,7 +2,10 @@ import { VersionedAggregateRoot } from 'src/shared/domain/aggregate-root';
 import { AlarmItem } from './alarm-item';
 import { AlarmSeverity } from './value-objects/alarm-severity';
 import { AlarmAcknowledgedEvent } from './events/alarm-acknowledged.event';
-import { SerializedEventPayload } from 'src/shared/domain/interfaces/serializable-event';
+import {
+  SerializableEvent,
+  SerializedEventPayload,
+} from 'src/shared/domain/interfaces/serializable-event';
 import { AlarmCreatedEvent } from './events/alarm-created.event';
 
 export class Alarm extends VersionedAggregateRoot {
@@ -14,6 +17,10 @@ export class Alarm extends VersionedAggregateRoot {
 
   constructor(public id: string) {
     super();
+  }
+
+  create(alarm: Alarm) {
+    this.apply(new AlarmCreatedEvent(alarm));
   }
 
   acknowledge() {
@@ -43,5 +50,17 @@ export class Alarm extends VersionedAggregateRoot {
       throw new Error('Alarm has already been acknowledged');
     }
     this.isAcknowledged = true;
+  }
+
+  public loadFromHistory(history: SerializableEvent[]): void {
+    super.loadFromHistory(history);
+
+    history.forEach((event) => {
+      if (event.type === 'AlarmCreatedEvent') {
+        this.create(event.data.alarm);
+      } else if (event.type === 'AlarmAcknowledgedEvent') {
+        this.acknowledge();
+      }
+    });
   }
 }

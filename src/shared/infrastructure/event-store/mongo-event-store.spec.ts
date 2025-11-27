@@ -34,10 +34,11 @@ describe('MongoEventStore.persist', () => {
     } as unknown as EventDeserializer);
 
     const persistPromise = store.persist(event);
-    console.log('persistPromise', persistPromise);
+    console.log('persistPromise');
     let completed = false;
     persistPromise.then(() => {
       completed = true;
+      console.log('completed');
     });
 
     await flushMicrotasks();

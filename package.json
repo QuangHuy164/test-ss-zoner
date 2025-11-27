@@ -14,7 +14,7 @@
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
-    "test-file": "jest ./src/shared/infrastructure/event-store/mongo-event-store.spec.ts",
+    "test-file": "jest ./src/alarms/integration/event-replay-consistency.integration.spec.ts",
     "test:unit": "jest 'src/.*\\.spec\\.ts' --testPathIgnorePatterns='src/alarms/integration'",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",

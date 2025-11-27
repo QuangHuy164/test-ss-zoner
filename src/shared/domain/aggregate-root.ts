@@ -16,6 +16,7 @@ export class VersionedAggregateRoot extends AggregateRoot {
   public loadFromHistory(history: SerializableEvent[]): void {
     const domainEvents = history.map((event) => event.data);
     super.loadFromHistory(domainEvents);
+    console.log('domainEvents', domainEvents);
 
     const lastEvent = history[history.length - 1];
     this.setVersion(new Version(lastEvent.position));

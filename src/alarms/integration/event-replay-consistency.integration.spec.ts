@@ -103,8 +103,10 @@ describe('Event replay consistency integration', () => {
     const history = await eventStore.getEventsByStreamId(aggregateId);
     const rehydratedAlarm = new Alarm(aggregateId);
     rehydratedAlarm.loadFromHistory(history);
+    console.log('rehydratedAlarm', rehydratedAlarm);
 
     const [projection] = await repository.findAll();
+    console.log('projection', projection);
 
     expect(rehydratedAlarm.isAcknowledged).toBe(true);
     expect(projection.isAcknowledged).toBe(true);
